@@ -1,0 +1,11 @@
+.questionContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.indexButtons {
+    margin-right: 10px;
+    margin-top: 20px;
+}
