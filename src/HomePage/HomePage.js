@@ -6,10 +6,9 @@ import QuestionPage from "../Components/QuestionPage";
 
 export default function HomePage() {
   const [MPData, setMPData] = useState([]);
-
-  //const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(0);
   const [index, setIndex] = useState(0);
-  var maxPageNum = 0;
+  const [ratingArr, setRatingArr] = useState([]);
 
   const fetchDataAPI = () => {
     axios
@@ -23,16 +22,24 @@ export default function HomePage() {
       });
   };
 
+  // const postDataHandler = (e) => {
+  //   e.preventDefault();
+  //   axios.post("https://mock-api.marriagepact.com/api/questions", {
+  //     name: name,
+  //   });
+  // };
+
   useEffect(() => {
     fetchDataAPI();
     // console.log("MPData: ", MPData);
   }, []);
   return (
-    <div>
+    <div className={styles.container}>
       <QuestionPage
         {...MPData[index]}
         onNext={() => setIndex(index + 1)}
         onPrevious={() => setIndex(index - 1)}
+        //onSubmit={()=>postDataHandler(e)}
         index={index}
         total={MPData.length - 1}
       />

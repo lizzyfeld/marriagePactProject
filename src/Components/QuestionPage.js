@@ -44,7 +44,7 @@ export default function QuestionPage(props) {
   console.log(props);
   return (
     <div style={{ justifyContent: "space-between" }}>
-      <h3>{props.question}</h3>
+      <h1>{props.question}</h1>
       <div className={styles.questionContainer}>
         <span style={{ marginRight: "10px" }}>{props.low_response}</span>
         <RatingBox />
@@ -62,6 +62,11 @@ export default function QuestionPage(props) {
           </button>
         )}
       </div>
+      {props.total == props.index && (
+        <button onClick={props.onSubmit} className={styles.indexButtons}>
+          Find my marriage pact!
+        </button>
+      )}
     </div>
   );
 }
