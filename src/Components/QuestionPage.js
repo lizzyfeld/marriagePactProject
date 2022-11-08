@@ -15,8 +15,7 @@ const StyledRating = styled(Rating)({
   },
 });
 
-const RatingBox = () => {
-  const [rating, setRating] = useState(0);
+const RatingBox = (props) => {
   return (
     <Box
       sx={{
@@ -24,13 +23,9 @@ const RatingBox = () => {
       }}
     >
       <StyledRating
-        name="customized-color"
+        {...props}
         defaultValue={0}
         getLabelText={(value) => `${value} Heart${value !== 1 ? "s" : ""}`}
-        onChange={(event, newValue) => {
-          setRating(newValue);
-          console.log("value here", newValue);
-        }}
         precision={1}
         icon={<FavoriteIcon fontSize="inherit" />}
         emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
@@ -41,32 +36,55 @@ const RatingBox = () => {
 };
 
 export default function QuestionPage(props) {
-  console.log(props);
+  console.log("here", props.setOfQuestions);
   return (
-    <div style={{ justifyContent: "space-between" }}>
-      <h1>{props.question}</h1>
-      <div className={styles.questionContainer}>
-        <span style={{ marginRight: "10px" }}>{props.low_response}</span>
-        <RatingBox />
-        <span style={{ marginLeft: "10px" }}>{props.high_response}</span>
-      </div>
+    <>
+      {props.setOfQuestions.map((question, i) => (
+        <div key={i} className={styles.questionContainer}>
+          <h1>{question.question}</h1>
+          <div style={{ display: "flex" }}>
+            <span style={{ marginRight: "10px" }}>{question.low_response}</span>
+            <RatingBox name={props.id} onChange={props.onChange} />
+            <span style={{ marginLeft: "10px" }}>{question.high_response}</span>
+          </div>
+        </div>
+      ))}
       <div>
-        {props.index > 0 && (
-          <button onClick={props.onPrevious} className={styles.indexButtons}>
-            Previous
-          </button>
+        {props.currentPage > 1 && (
+          <button onClick={props.onPrevious}>Previous</button>
         )}
-        {props.total !== props.index && (
-          <button onClick={props.onNext} className={styles.indexButtons}>
-            Next
-          </button>
+        {props.pages[props.currentPage - 1].next_page && (
+          <button onClick={props.onNext}>Next</button>
         )}
       </div>
-      {props.total == props.index && (
-        <button onClick={props.onSubmit} className={styles.indexButtons}>
-          Find my marriage pact!
-        </button>
-      )}
-    </div>
+    </>
   );
+  // <div style={{ justifyContent: "space-between" }}>
+  //   {/* <h5>
+  //     {props.index}/{props.total}
+  //   </h5> */}
+  //   <h1>{props.question}</h1>
+  //   <div className={styles.questionContainer}>
+  //     <span style={{ marginRight: "10px" }}>{props.low_response}</span>
+  //     <RatingBox name={props.id} onChange={props.onChange} />
+  //     <span style={{ marginLeft: "10px" }}>{props.high_response}</span>
+  //   </div>
+  //   {/* <div>
+  //     {props.currentPage > 0 && (
+  //       <button onClick={props.onPrevious} className={styles.indexButtons}>
+  //         Previous
+  //       </button>
+  //     )}
+  //     {props.total !== props.currentPage && (
+  //       <button onClick={props.onNext} className={styles.indexButtons}>
+  //         Next
+  //       </button>
+  //     )}
+  //   </div> */}
+  //   {/* {props.total == props.currentPage && (
+  //     <button onClick={props.onSubmit} className={styles.indexButtons}>
+  //       Find my marriage pact!
+  //     </button>
+  //   )} */}
+  // </div>
 }
