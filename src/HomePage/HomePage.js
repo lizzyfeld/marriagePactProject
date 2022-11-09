@@ -8,49 +8,48 @@ export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(1); // current page number
   const [MPData, setMPData] = useState([]);
   const [anwsers, setAnswers] = useState({});
-  const onChange = (e) => {
-    setAnswers({ ...anwsers, [e.target.name]: +e.target.value });
+  const onChange = (e, id) => {
+    setAnswers({ ...anwsers, [id]: +e.target.value });
   };
   const postDataHandler = () => {
-    console.log(anwsers);
     axios
       .post(`https://mock-api.marriagepact.com/api/submit`, anwsers)
-      .then((res) => console.log(res))
+      .then((res) => console.log("sucess", res))
       .catch((err) => console.log(err));
   };
 
   const fetchDataAPI = () => {
-    //if axios.get for a particular page has already been called for a
-    // particular page, dont call again
-    if (pages[currentPage - 1]) return;
-    axios
-      .get(
-        `https://mock-api.marriagepact.com/api/questions?page=${currentPage}`
-      )
-      .then((res) => {
-        // console.log(res.data.data);
-        setPages([...pages, res.data]);
-        setMPData(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (currentPage > 0) {
+      axios
+        .get(
+          `https://mock-api.marriagepact.com/api/questions?page=${currentPage}`
+        )
+        .then((res) => {
+          setPages([...pages, res.data]);
+          setMPData(res.data.data);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   useEffect(() => {
     fetchDataAPI();
   }, [currentPage]);
-  console.log("pages", pages[currentPage]);
 
   return pages[currentPage - 1] ? (
     <div className={styles.container}>
       <QuestionPage
-        {...MPData[currentPage - 1]}
-        setOfQuestions={pages[0].data}
+        setOfQuestions={MPData}
         currentPage={currentPage}
         pages={pages}
-        onNext={() => setCurrentPage(currentPage + 1)}
-        onPrevious={() => setCurrentPage(currentPage - 1)}
+        onNext={() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          setCurrentPage(currentPage + 1);
+        }}
+        onPrevious={() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          setCurrentPage(currentPage - 1);
+        }}
         onChange={onChange}
         onSubmit={postDataHandler}
       />
